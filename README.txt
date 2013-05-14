@@ -64,3 +64,5 @@ Credits:
 
 -  Chronodot keyword added  by MrAlvin  2012-02-28 
 
+-  DS3234 functions added
+	by Daniel Knox

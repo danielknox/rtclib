@@ -817,7 +817,7 @@ void RTC_DS3234::setA2Time(byte A2Day, byte A2Hour, byte A2Minute, byte AlarmBit
     //  Sets the alarm-2 date and time on the DS3231, using A2* information
     byte temp_buffer;
     cs(LOW);
-    SPI.transfer(0x8b); // A1 starts at 0bh
+    SPI.transfer(0x8b); // A1 starts at 8bh
     // Send A2 Minute and A2M2
     SPI.transfer(bin2bcd(A2Minute) | ((AlarmBits & 0b00010000) << 3));
     // Figure out A2 hour 
@@ -1044,7 +1044,7 @@ byte RTC_DS3234::readControlByte(bool which) {
 
 void RTC_DS3234::writeControlByte(byte control, bool which) {
     // Write the selected control byte.
-    // which=false -> 0x0e, true->0x0f.
+    // which=false -> 0x8e, true->0x8f.
     cs(LOW);
     if (which) {
         SPI.transfer(0x8F);

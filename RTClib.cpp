@@ -146,6 +146,19 @@ char* DateTime::toString(char* buf, int maxlen) const
             );
     return buf;
 }
+// as a string
+char* DateTime::toYMDString(char* buf, int maxlen) const
+{
+    snprintf(buf,maxlen,"%04u/%02u/%02u %02u:%02u:%02u",
+             2000 + yOff,
+             m,
+             d,
+             hh,
+             mm,
+             ss
+            );
+    return buf;
+}
 
 void DateTime::operator+=(uint32_t additional)
 {
@@ -506,7 +519,7 @@ void RTC_DS3231::setA2Time(byte A2Day, byte A2Hour, byte A2Minute, byte AlarmBit
 void RTC_DS3231::turnOnAlarm(byte Alarm) {
     // turns on alarm number "Alarm". Defaults to 2 if Alarm is not 1.
     byte temp_buffer = readControlByte(0);
-    // modify control byte
+    // turn on control byte INTCN and A1IE or A2IE
     if (Alarm == 1) {
         temp_buffer = temp_buffer | 0b00000101;
     } else {
@@ -519,7 +532,7 @@ void RTC_DS3231::turnOffAlarm(byte Alarm) {
     // turns off alarm number "Alarm". Defaults to 2 if Alarm is not 1.
     // Leaves interrupt pin alone.
     byte temp_buffer = readControlByte(0);
-    // modify control byte
+    // modify control byte A1IE or A2IE
     if (Alarm == 1) {
         temp_buffer = temp_buffer & 0b11111110;
     } else {
@@ -532,6 +545,7 @@ bool RTC_DS3231::checkAlarmEnabled(byte Alarm) {
     // Checks whether the given alarm is enabled.
     byte result = 0x0;
     byte temp_buffer = readControlByte(0);
+    // Check A1IE or A2IE
     if (Alarm == 1) {
         result = temp_buffer & 0b00000001;
     } else {
@@ -978,6 +992,10 @@ void RTC_DS3234::enableOscillator(bool TF, bool battery, byte frequency) {
     // 1 = 1.024 kHz
     // 2 = 4.096 kHz
     // 3 = 8.192 kHz (Default if frequency byte is out of range)
+    // Acronyms:
+    // BBSQW - Battery-Backed Square-Wave Enable
+    // ~EOSC - Enable Oscillator
+    // INTCN - Interrupt Control
     if (frequency > 3) frequency = 3;
     // read control byte in, but zero out current state of RS2 and RS1.
     byte temp_buffer = readControlByte(0) & 0b11100111;

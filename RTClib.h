@@ -35,6 +35,7 @@ public:
     uint32_t unixtime(void) const;
     // as a string
     char* toString(char* buf, int maxlen) const;
+    char* toYMDString(char* buf, int maxlen) const;
     // add additional time
     void operator+=(uint32_t);
 	

@@ -1,3 +1,5 @@
+I don't maintain this, so you probably shouldn't use it! (Not sure if it still works!)
+
 A Real Time Clock (RTC) Library for DS1307 compatible chips.
 -------------------------------------------------------------
 Tested to compile under Arduino 1.0.3
